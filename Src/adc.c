@@ -58,10 +58,13 @@ void MX_ADC_Init(void)
     /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
     */
   hadc.Instance = ADC1;
-  hadc.Init.OversamplingMode = DISABLE;
+  hadc.Init.OversamplingMode = ENABLE;
+  hadc.Init.Oversample.Ratio = ADC_OVERSAMPLING_RATIO_8;
+  hadc.Init.Oversample.RightBitShift = ADC_RIGHTBITSHIFT_1;
+  hadc.Init.Oversample.TriggeredMode = ADC_TRIGGEREDMODE_SINGLE_TRIGGER;
   hadc.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
   hadc.Init.Resolution = ADC_RESOLUTION_12B;
-  hadc.Init.SamplingTime = ADC_SAMPLETIME_12CYCLES_5;
+  hadc.Init.SamplingTime = ADC_SAMPLETIME_7CYCLES_5;
   hadc.Init.ScanConvMode = ADC_SCAN_DIRECTION_FORWARD;
   hadc.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc.Init.ContinuousConvMode = ENABLE;
