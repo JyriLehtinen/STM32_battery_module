@@ -163,7 +163,39 @@ void HAL_RTC_MspDeInit(RTC_HandleTypeDef* rtcHandle)
 } 
 
 /* USER CODE BEGIN 1 */
+uint32_t RTC_GetSeconds()
+{
+  RTC_TimeTypeDef _sTime;
+  RTC_DateTypeDef _sDate;
+  uint32_t _seconds= 0;
 
+  HAL_RTC_GetTime(&hrtc, &_sTime, RTC_FORMAT_BIN); //Get the time from RTC, reset should set all fields to 0
+  HAL_RTC_GetDate(&hrtc, &_sDate, RTC_FORMAT_BIN); //Has to be called to unlock the RTC shadow registers.
+
+  //Convert time to passed seconds
+  _seconds += _sTime.Seconds; //Add passed seconds
+  _seconds += _sTime.Minutes * 60; //Secs = 60*mins
+  _seconds += _sTime.Hours * 3600; //Secs = hours * 60 * 60
+
+  return _seconds;
+}
+
+
+void CalibrateRTC(RTC_HandleTypeDef *hrtc, uint32_t start_tick, uint32_t end_tick)
+{
+  if(start_tick < end_tick)
+    {
+      hrtc->Init.SynchPrediv = hrtc->Init.SynchPrediv*(5*60000)/(end_tick-start_tick);
+      if (HAL_RTC_Init(hrtc) != HAL_OK) //I belive it said somewhere in the manuals that all of the RTC configuration registers have to be set for the changes to take effect. Thus, full init() instead of one registry write
+        {
+          Error_Handler();
+        }
+      if (HAL_RTCEx_SetWakeUpTimer_IT(hrtc, (hrtc->Init.SynchPrediv+1)*8, RTC_WAKEUPCLOCK_RTCCLK_DIV16) != HAL_OK)
+        {
+          Error_Handler();
+        }
+    }
+}
 /* USER CODE END 1 */
 
 /**

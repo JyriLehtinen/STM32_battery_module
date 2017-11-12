@@ -62,7 +62,8 @@ extern void _Error_Handler(char *, int);
 void MX_RTC_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+uint32_t RTC_GetSeconds(void);
+void CalibrateRTC(RTC_HandleTypeDef *hrtc, uint32_t start_tick, uint32_t end_tick);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
