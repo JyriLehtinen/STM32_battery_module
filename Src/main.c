@@ -41,6 +41,7 @@
 #include "rtc.h"
 #include "tim.h"
 #include "gpio.h"
+#include "display.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -51,6 +52,7 @@
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 uint8_t led;
+uint8_t state;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -101,6 +103,26 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  if(state == 0)
+	  {
+		  // State 0 - Standby
+
+	  }
+	  else if (state == 1)
+	  {
+		  // State 1 -  Charge view
+		  chargeView();
+	  }
+	  else if (state == 2)
+	  {
+		  // State 2 - Voltage view
+		  voltageView();
+	  }
+	  else if (state == 3)
+	  {
+		  // State 3 - Temperature view
+		  temperatureView();
+	  }
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
