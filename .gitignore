@@ -1,0 +1,9 @@
+/Debug/
+.project
+.settings/
+.cproject
+.mxproject
+Blink_New.xml
+Inc/Test.h
+STM32L053R8Tx_FLASH.ld
+Src/Test.c
