@@ -30,7 +30,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define ST7565_STARTBYTES 0
 
-extern void DelaymS(vu32 nTime);
 //extern void DelayuS(vu32 nCount);
 uint8_t is_reversed = 0;
 
@@ -338,13 +337,13 @@ void ST7565_st7565_init(void) {
   // toggle RST low to reset; CS low so it'll listen to us
 //  if (cs > 0)
 //    digitalWrite(cs, LOW);
-  GPIO_ResetBits(GPIOB, GPIO_Pin_9);
+  GPIO_ResetBits(GPIOB, GPIO_PIN_9);
 
 //  digitalWrite(rst, LOW);
-  GPIO_ResetBits(GPIOB, GPIO_Pin_10);
-  DelaymS(500);
+  GPIO_ResetBits(GPIOB, GPIO_PIN_10);
+  HAL_Delay(500);
 //  digitalWrite(rst, HIGH);
-  GPIO_SetBits(GPIOB, GPIO_Pin_10);
+  GPIO_SetBits(GPIOB, GPIO_PIN_10);
 
   // LCD bias select
   ST7565_st7565_command(CMD_SET_BIAS_7);
@@ -358,17 +357,17 @@ void ST7565_st7565_init(void) {
   // turn on voltage converter (VC=1, VR=0, VF=0)
   ST7565_st7565_command(CMD_SET_POWER_CONTROL | 0x4);
   // wait for 50% rising
-  DelaymS(50);
+  HAL_Delay(50);
 
   // turn on voltage regulator (VC=1, VR=1, VF=0)
   ST7565_st7565_command(CMD_SET_POWER_CONTROL | 0x6);
   // wait >=50ms
-  DelaymS(50);
+  HAL_Delay(50);
 
   // turn on voltage follower (VC=1, VR=1, VF=1)
   ST7565_st7565_command(CMD_SET_POWER_CONTROL | 0x7);
   // wait
-  DelaymS(10);
+  HAL_Delay(10);
 
   // set lcd operating voltage (regulator resistor, ref voltage resistor)
   ST7565_st7565_command(CMD_SET_RESISTOR_RATIO | 0x6);
@@ -434,9 +433,9 @@ void ST7565_display(void) {
     }
 #endif
 
-  DelaymS(1);
+  HAL_Delay(1);
     ST7565_st7565_command(CMD_SET_PAGE | pagemap[p]);
-    DelaymS(1);//DelayuS(100);
+    HAL_Delay(1);//DelayuS(100);
 
 
 #ifdef enablePartialUpdate
@@ -449,11 +448,11 @@ void ST7565_display(void) {
 #endif
 
     ST7565_st7565_command(CMD_SET_COLUMN_LOWER | ((col+ST7565_STARTBYTES) & 0xf));
-    DelaymS(1);
+    HAL_Delay(1);
     ST7565_st7565_command(CMD_SET_COLUMN_UPPER | (((col+ST7565_STARTBYTES) >> 4) & 0x0F));
-    DelaymS(1);
+    HAL_Delay(1);
     ST7565_st7565_command(CMD_RMW);
-    DelaymS(1);//DelayuS(100);
+    HAL_Delay(1);//DelayuS(100);
     
     for(; col < maxcol; col++) {
       //uart_putw_dec(col);

@@ -40,10 +40,11 @@
 #include "stm32l0xx_hal.h"
 #include "adc.h"
 #include "dma.h"
+#include "i2c.h"
 #include "rtc.h"
+#include "spi.h"
 #include "tim.h"
 #include "gpio.h"
-#include "display.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -98,6 +99,8 @@ int main(void)
   MX_TIM6_Init();
   MX_RTC_Init();
   MX_ADC_Init();
+  MX_SPI1_Init();
+  MX_I2C1_Init();
 
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start_IT(&htim6);
@@ -179,7 +182,8 @@ void SystemClock_Config(void)
     _Error_Handler(__FILE__, __LINE__);
   }
 
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_RTC;
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_I2C1|RCC_PERIPHCLK_RTC;
+  PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_PCLK1;
   PeriphClkInit.RTCClockSelection = RCC_RTCCLKSOURCE_LSI;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
