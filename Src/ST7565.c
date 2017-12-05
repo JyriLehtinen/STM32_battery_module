@@ -31,6 +31,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #define ST7565_STARTBYTES 0
 
 //extern void DelayuS(vu32 nCount);
+
+extern SPI_HandleTypeDef hspi1;
+
 uint8_t is_reversed = 0;
 
 // a handy reference to where the pages are on the screen
@@ -337,13 +340,13 @@ void ST7565_st7565_init(void) {
   // toggle RST low to reset; CS low so it'll listen to us
 //  if (cs > 0)
 //    digitalWrite(cs, LOW);
-  GPIO_ResetBits(GPIOB, GPIO_PIN_9);
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, GPIO_PIN_RESET);
 
 //  digitalWrite(rst, LOW);
-  GPIO_ResetBits(GPIOB, GPIO_PIN_10);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_RESET);
   HAL_Delay(500);
 //  digitalWrite(rst, HIGH);
-  GPIO_SetBits(GPIOB, GPIO_PIN_10);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_RESET);
 
   // LCD bias select
   ST7565_st7565_command(CMD_SET_BIAS_7);
@@ -384,20 +387,22 @@ void ST7565_st7565_init(void) {
 
 inline void ST7565_spiwrite(uint8_t c) {
   //shiftOut(sid, sclk, MSBFIRST, c);
-  while (SPI_GetFlagStatus(SPI2, SPI_FLAG_TXE) == RESET);
-  SPI_SendData(SPI2, c);
+  while(HAL_SPI_GetState(&hspi1) == HAL_SPI_STATE_BUSY_TX);
+  HAL_SPI_Transmit(&hspi1, &c, 1, 1000);
 }
 
 void ST7565_st7565_command(uint8_t c) {
 //  digitalWrite(a0, LOW);
-  GPIO_ResetBits(GPIOB, GPIO_PIN_11);
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_RESET);
+
 
   ST7565_spiwrite(c);
 }
 
 void ST7565_st7565_data(uint8_t c) {
 //  digitalWrite(a0, HIGH);
-  GPIO_SetBits(GPIOB, GPIO_PIN_11);
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_RESET);
+
 
   ST7565_spiwrite(c);
 }
