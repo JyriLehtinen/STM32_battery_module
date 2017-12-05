@@ -340,13 +340,13 @@ void ST7565_st7565_init(void) {
   // toggle RST low to reset; CS low so it'll listen to us
 //  if (cs > 0)
 //    digitalWrite(cs, LOW);
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(LCD_CS_GPIO_PORT, LCD_CS_PIN, GPIO_PIN_RESET);
 
 //  digitalWrite(rst, LOW);
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_RESET);
-  HAL_Delay(500);
+	HAL_GPIO_WritePin(LCD_RES_GPIO_PORT, LCD_RES_PIN, GPIO_PIN_RESET);
+	HAL_Delay(500);
 //  digitalWrite(rst, HIGH);
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(LCD_RES_GPIO_PORT, LCD_RES_PIN, GPIO_PIN_SET);
 
   // LCD bias select
   ST7565_st7565_command(CMD_SET_BIAS_7);
@@ -393,7 +393,7 @@ inline void ST7565_spiwrite(uint8_t c) {
 
 void ST7565_st7565_command(uint8_t c) {
 //  digitalWrite(a0, LOW);
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(LCD_A0_GPIO_PORT, LCD_A0_PIN, GPIO_PIN_RESET);
 
 
   ST7565_spiwrite(c);
@@ -401,7 +401,7 @@ void ST7565_st7565_command(uint8_t c) {
 
 void ST7565_st7565_data(uint8_t c) {
 //  digitalWrite(a0, HIGH);
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(LCD_A0_GPIO_PORT, LCD_A0_PIN, GPIO_PIN_SET);
 
 
   ST7565_spiwrite(c);
