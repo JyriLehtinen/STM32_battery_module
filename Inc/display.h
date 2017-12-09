@@ -12,4 +12,7 @@ void chargeView(void);
 void voltageView(void);
 void temperatureView(void);
 
+void drawTopInfo(void);
+void drawGraph(void);
+
 #endif /* DISPLAY_H_ */

@@ -45,6 +45,7 @@
 #include "spi.h"
 #include "tim.h"
 #include "gpio.h"
+#include "display.h"
 
 /* USER CODE BEGIN Includes */
 
