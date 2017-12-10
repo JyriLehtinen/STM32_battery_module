@@ -45,10 +45,11 @@
 #include "spi.h"
 #include "tim.h"
 #include "gpio.h"
-#include "display.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "LM75.h"
+#include "ST7565.h"
+#include "display.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -57,6 +58,9 @@
 /* Private variables ---------------------------------------------------------*/
 uint8_t led;
 uint8_t state;
+
+extern I2C_HandleTypeDef hi2c1;
+uint8_t i2c_rx[LM75_BUFFER_LEN];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -105,6 +109,12 @@ int main(void)
 
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start_IT(&htim6);
+
+  LM75_GetValue(hi2c1);
+
+  ST7565_begin(0xFF);
+  ST7565_drawcircle(64, 32, 10, 1);
+  ST7565_display();
   /* USER CODE END 2 */
 
   /* Infinite loop */
